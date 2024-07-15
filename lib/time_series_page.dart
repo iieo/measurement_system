@@ -46,6 +46,23 @@ class _TimeSeriesPageState extends State<TimeSeriesPage> {
     return '';
   }
 
+  void Function() deleteSeries(List<String> series, int index) {
+    return () async {
+      try {
+        series.removeAt(index);
+        final directory = await getApplicationDocumentsDirectory();
+        final file = File('${directory.path}/saved_series.txt');
+        await file.writeAsString(series.join('\n\n'));
+        setState(() {});
+      } catch (e) {
+        print('Error deleting series: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error deleting series')),
+        );
+      }
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +98,7 @@ class _TimeSeriesPageState extends State<TimeSeriesPage> {
                 return SeriesCard(
                   timestamps: series[index].split(', '),
                   seriesIndex: index,
+                  onDelete: deleteSeries(series, index),
                 );
               },
             );

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class SeriesCard extends StatelessWidget {
   final List<String> timestamps;
   final int seriesIndex;
+  final VoidCallback onDelete;
 
   const SeriesCard({
     Key? key,
     required this.timestamps,
     required this.seriesIndex,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -30,13 +32,22 @@ class SeriesCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Series ${seriesIndex + 1}',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Series ${seriesIndex + 1}',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete, color: theme.colorScheme.error),
+                  onPressed: onDelete,
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             ...timestamps.asMap().entries.map((entry) {
