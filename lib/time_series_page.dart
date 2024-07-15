@@ -46,9 +46,11 @@ class _TimeSeriesPageState extends State<TimeSeriesPage> {
     return '';
   }
 
-  void Function() deleteSeries(List<String> series, int index) {
+  void Function() deleteSeries(int index) {
     return () async {
       try {
+        String seriesData = await loadSavedSeries();
+        List<String> series = seriesData.split('\n\n');
         series.removeAt(index);
         final directory = await getApplicationDocumentsDirectory();
         final file = File('${directory.path}/saved_series.txt');
@@ -98,7 +100,7 @@ class _TimeSeriesPageState extends State<TimeSeriesPage> {
                 return SeriesCard(
                   timestamps: series[index].split(', '),
                   seriesIndex: index,
-                  onDelete: deleteSeries(series, index),
+                  onDelete: deleteSeries(index),
                 );
               },
             );
